@@ -2,4 +2,17 @@
 body {
   background-color: #e2e2e2;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+}
+
+.page-header {
+  background-color: #121212;
+  color: white;
+  padding: 15px 15px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 1.5em;
+  font-weight: 900;
 }
