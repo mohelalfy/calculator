@@ -80,6 +80,34 @@ function addButtonEvents() {
     calculation.operator ??= "/";
     updateCalculationScreen();
   });
+
+  buttons.function.clear.addEventListener("click", () => {
+    calculation.operator = null;
+    calculation.right = null;
+    calculation.left = 0;
+
+    updateCalculationScreen();
+  });
+
+  buttons.function.del.addEventListener("click", () => {
+    if (calculation.right !== null) {
+      if (String(calculation.right).length === 1) {
+        calculation.right = null;
+      } else {
+        calculation.right = Number(String(calculation.right).slice(0, -1));
+      }
+    } else if (calculation.operator !== null) {
+      calculation.operator = null;
+    } else {
+      if (String(calculation.left).length === 1) {
+        calculation.left = 0;
+      } else {
+        calculation.left = Number(String(calculation.left).slice(0, -1));
+      }
+    }
+
+    updateCalculationScreen();
+  });
 }
 
 addButtonEvents();
