@@ -24,7 +24,7 @@ body {
   flex-direction: column;
   background-color: #121212;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .screen {
@@ -37,8 +37,6 @@ body {
   flex-direction: column;
   padding: 10px;
 }
-
-
 
 #past-calculation {
   color: #363c3e;
@@ -68,14 +66,28 @@ body {
   border-radius: 5px;
   font-size: 1.1em;
   font-weight: bold;
+  cursor: pointer;
+  transition: 200ms background-color ;
+}
+
+.btn:hover {
+  background-color: #272a2c;
 }
 
 .btn-function {
   background-color: #EF6461;
 }
 
+.btn-function:hover {
+  background-color: #ed5552
+}
+
 .btn-operation {
   background-color: #E4B363;
+}
+
+.btn-operation:hover {
+  background-color: #d3a14f;
 }
 
 #btn-clear {
