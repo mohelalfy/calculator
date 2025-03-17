@@ -25,7 +25,61 @@ const buttons = {
   },
 };
 
-const screen = {
+const calculatorScreen = {
   current: document.querySelector("#current-calculation"),
   past: document.querySelector("#past-calculation"),
 };
+
+const calculation = {
+  left: 0,
+  operator: null,
+  right: null,
+};
+
+function updateCalculationScreen() {
+  let text = `${calculation.left}`;
+  if (calculation.operator !== null) {
+    text += ` ${calculation.operator}`;
+  }
+  if (calculation.right !== null) {
+    text += ` ${calculation.right}`;
+  }
+
+  calculatorScreen.current.textContent = text;
+}
+
+function addButtonEvents() {
+  // Numbers 0-9
+  for (let i = 0; i < buttons.number.length; i++) {
+    const btn = buttons.number[i];
+
+    btn.addEventListener("click", (e) => {
+      if (calculation.operator === null) {
+        calculation.left = Number(String(calculation.left) + i);
+      } else {
+        calculation.right = Number(String(calculation.right ?? 0) + i);
+      }
+
+      updateCalculationScreen();
+    });
+  }
+
+  buttons.operation.add.addEventListener("click", (e) => {
+    calculation.operator ??= "+";
+    updateCalculationScreen();
+  });
+  buttons.operation.subt.addEventListener("click", (e) => {
+    calculation.operator ??= "-";
+    updateCalculationScreen();
+  });
+  buttons.operation.multiply.addEventListener("click", (e) => {
+    calculation.operator ??= "x";
+    updateCalculationScreen();
+  });
+  buttons.operation.divide.addEventListener("click", (e) => {
+    calculation.operator ??= "/";
+    updateCalculationScreen();
+  });
+}
+
+addButtonEvents();
