@@ -27,11 +27,37 @@ body {
   border-radius: 5px;
 }
 
+.screen {
+  height: 7em;
+  background-color: #E0DFD5;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+
+
+#past-calculation {
+  color: #363c3e;
+}
+
+.current-calculation-div {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+#current-calculation {
+  font-size: 2em;
+}
+
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 75px);
   grid-template-rows: repeat(5, 75px);
-
   gap: 7px;
 }
 
