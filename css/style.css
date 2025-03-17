@@ -22,6 +22,9 @@ body {
   margin: 20px auto;
   display: flex;
   flex-direction: column;
+  background-color: #121212;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .buttons {
@@ -30,6 +33,23 @@ body {
   grid-template-rows: repeat(5, 75px);
 
   gap: 7px;
+}
+
+.btn {
+  color: white;
+  background-color: #313638;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.btn-function {
+  background-color: #EF6461;
+}
+
+.btn-operation {
+  background-color: #E4B363;
 }
 
 #btn-clear {
