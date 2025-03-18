@@ -122,6 +122,7 @@ function clearScreen() {
   calculation.left = 0;
   calculation.operator = null;
   calculation.right = null;
+  calculatorScreen.past.textContent = "";
 
   updateCalculationScreen();
 }
