@@ -36,17 +36,19 @@ const calculation = {
   left: 0,
   operator: null,
   right: null,
+  leftDecimalLeading: false,
+  rightDecimalLeading: false,
 };
 
 // * UI
 
 function updateCalculationScreen() {
-  let text = `${calculation.left}`;
+  let text = `${calculation.left}${calculation.leftDecimalLeading ? "." : ""}`;
   if (calculation.operator !== null) {
     text += ` ${calculation.operator}`;
   }
   if (calculation.right !== null) {
-    text += ` ${calculation.right}`;
+    text += ` ${calculation.right}${calculation.rightDecimalLeading ? "." : ""}`;
   }
 
   calculatorScreen.current.textContent = text;
@@ -63,6 +65,7 @@ function addButtonEvents() {
   buttons.operation.multiply.addEventListener("click", () => operationButtonOnClick("x"));
   buttons.operation.divide.addEventListener("click", () => operationButtonOnClick("/"));
   buttons.operation.equal.addEventListener("click", () => operationButtonOnClick("="));
+  buttons.operation.decimal.addEventListener("click", decimalPointOnClick);
 
   buttons.function.clear.addEventListener("click", clearScreen);
   buttons.function.del.addEventListener("click", delScreen);
@@ -72,15 +75,25 @@ function addButtonEvents() {
 
 function numberButtonOnClick(buttonNumber) {
   if (calculation.operator === null) {
-    calculation.left = Number(String(calculation.left) + buttonNumber);
+    calculation.left = Number(
+      String(calculation.left) + (calculation.leftDecimalLeading ? "." : "") + buttonNumber
+    );
+    calculation.leftDecimalLeading = false;
   } else {
-    calculation.right = Number(String(calculation.right ?? 0) + buttonNumber);
+    calculation.right = Number(
+      String(calculation.right ?? 0) + (calculation.rightDecimalLeading ? "." : "") + buttonNumber
+    );
+    calculation.rightDecimalLeading = false;
   }
 
   updateCalculationScreen();
 }
 
 function operationButtonOnClick(operation) {
+  if (calculation.leftDecimalLeading || calculation.rightDecimalLeading) {
+    return;
+  }
+
   if (operation === "=") {
     if (calculation.operator === null || calculation.right === null) {
       return;
@@ -94,6 +107,20 @@ function operationButtonOnClick(operation) {
   }
 
   calculation.operator ??= operation;
+  updateCalculationScreen();
+}
+
+function decimalPointOnClick() {
+  if (calculation.right !== null) {
+    if (!String(calculation.right).includes(".")) {
+      calculation.rightDecimalLeading = true;
+    }
+  } else {
+    if (!String(calculation.left).includes(".")) {
+      calculation.leftDecimalLeading = true;
+    }
+  }
+
   updateCalculationScreen();
 }
 
@@ -122,6 +149,8 @@ function clearScreen() {
   calculation.left = 0;
   calculation.operator = null;
   calculation.right = null;
+  calculation.leftDecimalLeading = false;
+  calculation.rightDecimalLeading = false;
   calculatorScreen.past.textContent = "";
 
   updateCalculationScreen();
@@ -129,18 +158,36 @@ function clearScreen() {
 
 function delScreen() {
   if (calculation.right !== null) {
-    if (String(calculation.right).length === 1) {
+    if (String(calculation.right).length === 1 && !calculation.rightDecimalLeading) {
       calculation.right = null;
     } else {
-      calculation.right = Number(String(calculation.right).slice(0, -1));
+      const numStr = String(calculation.right);
+      if (numStr[numStr.length - 2] === ".") {
+        calculation.rightDecimalLeading = true;
+      } else if (calculation.rightDecimalLeading) {
+        calculation.rightDecimalLeading = false;
+        updateCalculationScreen();
+        return;
+      }
+
+      calculation.right = Number(numStr.slice(0, -1));
     }
   } else if (calculation.operator !== null) {
     calculation.operator = null;
   } else {
-    if (String(calculation.left).length === 1) {
+    if (String(calculation.left).length === 1 && !calculation.leftDecimalLeading) {
       calculation.left = 0;
     } else {
-      calculation.left = Number(String(calculation.left).slice(0, -1));
+      const numStr = String(calculation.left);
+      if (numStr[numStr.length - 2] === ".") {
+        calculation.leftDecimalLeading = true;
+      } else if (calculation.leftDecimalLeading) {
+        calculation.leftDecimalLeading = false;
+        updateCalculationScreen();
+        return;
+      }
+
+      calculation.left = Number(numStr.slice(0, -1));
     }
   }
 
