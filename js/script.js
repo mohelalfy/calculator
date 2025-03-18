@@ -102,7 +102,7 @@ function addKeyboardShortcuts() {
 
     if (e.code === "Backspace") {
       buttons.function.del.click();
-    } else if (e.code === "Enter") {
+    } else if (e.code === "Enter" || e.code === "NumpadEnter") {
       buttons.operation.equal.click();
     }
   });
