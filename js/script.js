@@ -38,11 +38,17 @@ const calculation = {
   right: null,
   leftDecimalLeading: false,
   rightDecimalLeading: false,
+  isUndefined: false,
 };
 
 // * UI
 
 function updateCalculationScreen() {
+  if (calculation.isUndefined) {
+    calculatorScreen.current.textContent = "Can't divide by 0";
+    return;
+  }
+
   let text = `${calculation.left}${calculation.leftDecimalLeading ? "." : ""}`;
   if (calculation.operator !== null) {
     text += ` ${calculation.operator}`;
@@ -135,6 +141,13 @@ function operationButtonOnClick(operation) {
     if (calculation.operator === null || calculation.right === null) {
       return;
     }
+
+    if (calculation.operator === "/" && calculation.right === 0) {
+      calculation.isUndefined = true;
+      updateCalculationScreen();
+      return;
+    }
+
     calculatorScreen.past.textContent = calculatorScreen.current.textContent;
     calculation.left = Math.round(doCalculation() * 1e7) / 1e7;
     calculation.right = null;
@@ -194,6 +207,7 @@ function clearScreen() {
   calculation.right = null;
   calculation.leftDecimalLeading = false;
   calculation.rightDecimalLeading = false;
+  calculation.isUndefined = false;
   calculatorScreen.past.textContent = "";
 
   updateCalculationScreen();
@@ -201,6 +215,11 @@ function clearScreen() {
 
 function delScreen() {
   if (calculation.right !== null) {
+    if (calculation.isUndefined) {
+      calculation.isUndefined = false;
+      updateCalculationScreen();
+      return;
+    }
     if (String(calculation.right).length === 1 && !calculation.rightDecimalLeading) {
       calculation.right = null;
     } else {
