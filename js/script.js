@@ -62,6 +62,7 @@ function addButtonEvents() {
   buttons.operation.subt.addEventListener("click", () => operationButtonOnClick("-"));
   buttons.operation.multiply.addEventListener("click", () => operationButtonOnClick("x"));
   buttons.operation.divide.addEventListener("click", () => operationButtonOnClick("/"));
+  buttons.operation.equal.addEventListener("click", () => operationButtonOnClick("="));
 
   buttons.function.clear.addEventListener("click", clearScreen);
   buttons.function.del.addEventListener("click", delScreen);
@@ -80,8 +81,41 @@ function numberButtonOnClick(buttonNumber) {
 }
 
 function operationButtonOnClick(operation) {
+  if (operation === "=") {
+    if (calculation.operator === null || calculation.right === null) {
+      return;
+    }
+    calculatorScreen.past.textContent = calculatorScreen.current.textContent;
+    calculation.left = Math.round(doCalculation() * 1e7) / 1e7;
+    calculation.operator = null;
+    calculation.right = null;
+    updateCalculationScreen();
+    return;
+  }
+
   calculation.operator ??= operation;
   updateCalculationScreen();
+}
+
+function doCalculation() {
+  let result;
+
+  switch (calculation.operator) {
+    case "x":
+      result = calculation.left * calculation.right;
+      break;
+    case "/":
+      result = calculation.left / calculation.right;
+      break;
+    case "+":
+      result = calculation.left + calculation.right;
+      break;
+    case "-":
+      result = calculation.left - calculation.right;
+      break;
+  }
+
+  return result;
 }
 
 function clearScreen() {
