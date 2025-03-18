@@ -131,14 +131,20 @@ function operationButtonOnClick(operation) {
     return;
   }
 
-  if (operation === "=") {
+  if (operation === "=" || calculation.right !== null) {
     if (calculation.operator === null || calculation.right === null) {
       return;
     }
     calculatorScreen.past.textContent = calculatorScreen.current.textContent;
     calculation.left = Math.round(doCalculation() * 1e7) / 1e7;
-    calculation.operator = null;
     calculation.right = null;
+
+    if (["+", "-", "/", "x"].includes(operation)) {
+      calculation.operator = operation;
+    } else {
+      calculation.operator = null;
+    }
+
     updateCalculationScreen();
     return;
   }
