@@ -40,6 +40,7 @@ body {
 
 #past-calculation {
   color: #363c3e;
+  flex-basis: 1em;
 }
 
 .current-calculation-div {
