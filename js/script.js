@@ -72,7 +72,7 @@ function addButtonEvents() {
 }
 
 function addKeyboardShortcuts() {
-  document.addEventListener("keypress", (e) => {
+  document.addEventListener("keydown", (e) => {
     for (let i = 0; i < buttons.number.length; i++) {
       if (e.key === String(i)) {
         buttons.number[i].click();
