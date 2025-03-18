@@ -71,6 +71,43 @@ function addButtonEvents() {
   buttons.function.del.addEventListener("click", delScreen);
 }
 
+function addKeyboardShortcuts() {
+  document.addEventListener("keypress", (e) => {
+    for (let i = 0; i < buttons.number.length; i++) {
+      if (e.key === String(i)) {
+        buttons.number[i].click();
+        return;
+      }
+    }
+    switch (e.key) {
+      case "*":
+        buttons.operation.multiply.click();
+        break;
+      case "/":
+        buttons.operation.divide.click();
+        break;
+      case "+":
+        buttons.operation.add.click();
+        break;
+      case "-":
+        buttons.operation.subt.click();
+        break;
+      case "=":
+        buttons.operation.equal.click();
+        break;
+      case ".":
+        buttons.operation.decimal.click();
+        break;
+    }
+
+    if (e.code === "Backspace") {
+      buttons.function.del.click();
+    } else if (e.code === "Enter") {
+      buttons.operation.equal.click();
+    }
+  });
+}
+
 // * Logic
 
 function numberButtonOnClick(buttonNumber) {
@@ -197,3 +234,4 @@ function delScreen() {
 // * Startup code
 
 addButtonEvents();
+addKeyboardShortcuts();
