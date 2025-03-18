@@ -1,3 +1,5 @@
+// * Query selectors
+
 const buttons = {
   number: [
     document.querySelector("#btn-zero"),
@@ -36,6 +38,8 @@ const calculation = {
   right: null,
 };
 
+// * UI
+
 function updateCalculationScreen() {
   let text = `${calculation.left}`;
   if (calculation.operator !== null) {
@@ -51,63 +55,63 @@ function updateCalculationScreen() {
 function addButtonEvents() {
   // Numbers 0-9
   for (let i = 0; i < buttons.number.length; i++) {
-    const btn = buttons.number[i];
-
-    btn.addEventListener("click", (e) => {
-      if (calculation.operator === null) {
-        calculation.left = Number(String(calculation.left) + i);
-      } else {
-        calculation.right = Number(String(calculation.right ?? 0) + i);
-      }
-
-      updateCalculationScreen();
-    });
+    buttons.number[i].addEventListener("click", () => numberButtonOnClick(i));
   }
 
-  buttons.operation.add.addEventListener("click", (e) => {
-    calculation.operator ??= "+";
-    updateCalculationScreen();
-  });
-  buttons.operation.subt.addEventListener("click", (e) => {
-    calculation.operator ??= "-";
-    updateCalculationScreen();
-  });
-  buttons.operation.multiply.addEventListener("click", (e) => {
-    calculation.operator ??= "x";
-    updateCalculationScreen();
-  });
-  buttons.operation.divide.addEventListener("click", (e) => {
-    calculation.operator ??= "/";
-    updateCalculationScreen();
-  });
+  buttons.operation.add.addEventListener("click", () => operationButtonOnClick("+"));
+  buttons.operation.subt.addEventListener("click", () => operationButtonOnClick("-"));
+  buttons.operation.multiply.addEventListener("click", () => operationButtonOnClick("x"));
+  buttons.operation.divide.addEventListener("click", () => operationButtonOnClick("/"));
 
-  buttons.function.clear.addEventListener("click", () => {
-    calculation.operator = null;
-    calculation.right = null;
-    calculation.left = 0;
-
-    updateCalculationScreen();
-  });
-
-  buttons.function.del.addEventListener("click", () => {
-    if (calculation.right !== null) {
-      if (String(calculation.right).length === 1) {
-        calculation.right = null;
-      } else {
-        calculation.right = Number(String(calculation.right).slice(0, -1));
-      }
-    } else if (calculation.operator !== null) {
-      calculation.operator = null;
-    } else {
-      if (String(calculation.left).length === 1) {
-        calculation.left = 0;
-      } else {
-        calculation.left = Number(String(calculation.left).slice(0, -1));
-      }
-    }
-
-    updateCalculationScreen();
-  });
+  buttons.function.clear.addEventListener("click", clearScreen);
+  buttons.function.del.addEventListener("click", delScreen);
 }
+
+// * Logic
+
+function numberButtonOnClick(buttonNumber) {
+  if (calculation.operator === null) {
+    calculation.left = Number(String(calculation.left) + buttonNumber);
+  } else {
+    calculation.right = Number(String(calculation.right ?? 0) + buttonNumber);
+  }
+
+  updateCalculationScreen();
+}
+
+function operationButtonOnClick(operation) {
+  calculation.operator ??= operation;
+  updateCalculationScreen();
+}
+
+function clearScreen() {
+  calculation.left = 0;
+  calculation.operator = null;
+  calculation.right = null;
+
+  updateCalculationScreen();
+}
+
+function delScreen() {
+  if (calculation.right !== null) {
+    if (String(calculation.right).length === 1) {
+      calculation.right = null;
+    } else {
+      calculation.right = Number(String(calculation.right).slice(0, -1));
+    }
+  } else if (calculation.operator !== null) {
+    calculation.operator = null;
+  } else {
+    if (String(calculation.left).length === 1) {
+      calculation.left = 0;
+    } else {
+      calculation.left = Number(String(calculation.left).slice(0, -1));
+    }
+  }
+
+  updateCalculationScreen();
+}
+
+// * Startup code
 
 addButtonEvents();
